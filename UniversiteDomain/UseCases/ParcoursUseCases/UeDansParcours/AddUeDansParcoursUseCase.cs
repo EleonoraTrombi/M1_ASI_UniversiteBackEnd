@@ -67,4 +67,9 @@ public class AddUeDansParcoursUseCase(IRepositoryFactory repositoryFactory)
             if (trouve is { Count:> 0}) throw new DuplicateUeDansParcoursException(idUe+" est déjà présente dans le parcours : "+idParcours);   
         }
     }
+    
+    public bool IsAuthorized(string role)
+    {
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
+    }
 }

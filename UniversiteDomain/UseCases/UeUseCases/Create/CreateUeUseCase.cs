@@ -35,4 +35,9 @@ public class CreateUeUseCase(IUeRepository ueRepository)
         if (ue.Intitule.Length <= 3) throw new InvalidNomUeException(ue.Intitule +" incorrect - Le nom d'une Ue doit contenir plus de 3 caractères");
     }
 
+
+    public bool IsAuthorized(string role)
+    {
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
+    }
 }

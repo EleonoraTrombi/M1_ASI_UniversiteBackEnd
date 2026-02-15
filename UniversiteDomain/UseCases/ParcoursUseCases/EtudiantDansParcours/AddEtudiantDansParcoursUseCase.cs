@@ -8,7 +8,7 @@ namespace UniversiteDomain.UseCases.ParcoursUseCases.EtudiantDansParcours;
 
 public class AddEtudiantDansParcoursUseCase(IRepositoryFactory repositoryFactory)
 {
-    // Rajout d'un étudiant dans un parcours
+    // Ajout d'un étudiant dans un parcours
       public async Task<Parcours> ExecuteAsync(Parcours parcours, Etudiant etudiant)
       {
           ArgumentNullException.ThrowIfNull(parcours);
@@ -21,7 +21,7 @@ public class AddEtudiantDansParcoursUseCase(IRepositoryFactory repositoryFactory
           return await repositoryFactory.ParcoursRepository().AddEtudiantAsync(idParcours, idEtudiant);
       }
 
-      // Rajout de plusieurs étudiants dans un parcours
+      // Ajout de plusieurs étudiants dans un parcours
       public async Task<Parcours> ExecuteAsync(Parcours parcours, List<Etudiant> etudiants)
       {
           long[] idEtudiants = etudiants.Select(x => x.Id).ToArray();
@@ -54,5 +54,10 @@ public class AddEtudiantDansParcoursUseCase(IRepositoryFactory repositoryFactory
         // On vérifie que l'étudiant n'est pas déjà dans le parcours
         List<Etudiant> inscrit = await repositoryFactory.EtudiantRepository().FindByConditionAsync(e=>e.Id.Equals(idEtudiant) && e.ParcoursSuivi.Id.Equals(idParcours));
         if (inscrit is { Count: > 0 }) throw new DuplicateInscriptionException(idEtudiant+" est déjà inscrit dans le parcours : " + idParcours);      
+    }
+    
+    public bool IsAuthorized(string role)
+    {
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
     }
 }

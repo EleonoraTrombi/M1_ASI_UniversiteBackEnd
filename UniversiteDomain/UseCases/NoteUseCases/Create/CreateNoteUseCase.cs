@@ -40,10 +40,9 @@ public class CreateNoteUseCase(IRepositoryFactory repositoryFactory)
         if (ue is { Count: 0 }) throw new UeNotFoundException(note.IdUe.ToString());
         
         // On recherche l'étudiant
-        List<Etudiant> etudiant = await repositoryFactory.EtudiantRepository().FindByConditionAsync(e=>e.Id.Equals(note.IdEtudiant));
-        if (etudiant is { Count: 0 }) throw new EtudiantNotFoundException(note.IdEtudiant.ToString());
-        //On récupére l'étudiant
-        Etudiant etud = etudiant[0];
+        Etudiant? etud = await repositoryFactory.EtudiantRepository().FindEtudiantCompletAsync(note.IdEtudiant);
+        if (etud == null) throw new EtudiantNotFoundException(note.IdEtudiant.ToString());
+        
         //Vérification que l'étudiant est inscrit dans un parcours
         if (etud.ParcoursSuivi is null) throw new InvalidEtudiantNoteException("L'étudiant n'est inscrit dans aucun parcours");
         // Vérification que l'UE appartient au parcours de l'étudiant
@@ -59,5 +58,11 @@ public class CreateNoteUseCase(IRepositoryFactory repositoryFactory)
         //Vérification qu'un étudiant a une seule note par Ue
         List<Note> noteEtudiant = await repositoryFactory.NoteRepository().FindByConditionAsync(n => n.IdUe.Equals(note.IdUe) && n.IdEtudiant.Equals(note.IdEtudiant));
         if (noteEtudiant is { Count:> 0 }) throw new InvalidEtudiantNoteException(note.IdUe + "Une note existe déjà pour cet étudiant dans cette UE");
+    }
+    
+    public bool IsAuthorized(string role)
+    {
+        // Seule la scolarité peut créer des notes
+        return role.Equals(Roles.Scolarite);
     }
 }

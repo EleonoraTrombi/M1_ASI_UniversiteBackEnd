@@ -156,4 +156,91 @@ public class ParcoursUnitTests
         Assert.That(parcoursTest.UesEnseignees[0].Id, Is.EqualTo(idUe));
     }
 
+
+
+    [Test]
+    public async Task DeleteParcoursUseCase()
+    {
+        long id = 1;
+        
+        var mock = new Mock<IParcoursRepository>();
+        mock.Setup(repo => repo.GetByIdWithDetailsAsync(id)).ReturnsAsync(new Parcours { Id = id, Inscrits = new List<Etudiant>(), UesEnseignees = new List<Ue>() });
+        mock.Setup(repo => repo.DeleteAsync(id)).Returns(Task.CompletedTask);
+        
+        var mockEtudiant = new Mock<IEtudiantRepository>();
+        mockEtudiant.Setup(repo => repo.FindByConditionAsync(It.IsAny<Expression<Func<Etudiant, bool>>>())).ReturnsAsync(new List<Etudiant>());
+
+        var mockFactory = new Mock<IRepositoryFactory>();
+        mockFactory.Setup(f => f.ParcoursRepository()).Returns(mock.Object);
+        mockFactory.Setup(f => f.EtudiantRepository()).Returns(mockEtudiant.Object);
+        
+        var useCase = new UniversiteDomain.UseCases.ParcoursUseCases.Delete.DeleteParcoursUseCase(mockFactory.Object);
+        
+        await useCase.ExecuteAsync(id);
+        
+        mock.Verify(repo => repo.DeleteAsync(id), Times.Once);
+    }
+
+    [Test]
+    public async Task GetAllParcoursUseCase()
+    {
+        List<Parcours> parcours = new List<Parcours>
+        {
+            new Parcours { Id = 1, NomParcours = "P1" },
+            new Parcours { Id = 2, NomParcours = "P2" }
+        };
+        
+        var mock = new Mock<IParcoursRepository>();
+        mock.Setup(repo => repo.FindAllAsync()).ReturnsAsync(parcours);
+        
+        var mockFactory = new Mock<IRepositoryFactory>();
+        mockFactory.Setup(f => f.ParcoursRepository()).Returns(mock.Object);
+        
+        var useCase = new UniversiteDomain.UseCases.ParcoursUseCases.Get.GetAllParcoursUseCase(mockFactory.Object);
+        
+        var result = await useCase.ExecuteAsync();
+        
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public async Task GetParcoursByIdUseCase()
+    {
+        long id = 1;
+        Parcours parcours = new Parcours { Id = id, NomParcours = "P1" };
+        
+        var mock = new Mock<IParcoursRepository>();
+        mock.Setup(repo => repo.GetByIdWithDetailsAsync(id)).ReturnsAsync(parcours);
+        
+        var mockFactory = new Mock<IRepositoryFactory>();
+        mockFactory.Setup(f => f.ParcoursRepository()).Returns(mock.Object);
+        
+        var useCase = new UniversiteDomain.UseCases.ParcoursUseCases.Get.GetParcoursByIdUseCase(mockFactory.Object);
+        
+        var result = await useCase.ExecuteAsync(id);
+        
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.Id, Is.EqualTo(id));
+    }
+
+    [Test]
+    public async Task UpdateParcoursUseCase()
+    {
+        Parcours parcours = new Parcours { Id = 1, NomParcours = "P1Updated" };
+        
+        var mock = new Mock<IParcoursRepository>();
+        mock.Setup(repo => repo.FindAsync(parcours.Id)).ReturnsAsync(parcours);
+        mock.Setup(repo => repo.UpdateAsync(parcours)).Returns(Task.CompletedTask);
+        
+        var mockFactory = new Mock<IRepositoryFactory>();
+        mockFactory.Setup(f => f.ParcoursRepository()).Returns(mock.Object);
+        
+        var useCase = new UniversiteDomain.UseCases.ParcoursUseCases.Update.UpdateParcoursUseCase(mockFactory.Object);
+        
+        var result = await useCase.ExecuteAsync(parcours);
+        
+        Assert.That(result.NomParcours, Is.EqualTo("P1Updated"));
+        mock.Verify(repo => repo.UpdateAsync(parcours), Times.Once);
+    }
 }

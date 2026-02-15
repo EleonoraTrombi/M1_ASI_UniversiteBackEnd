@@ -34,4 +34,9 @@ public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
         if (parcours.AnneeFormation != 1 && parcours.AnneeFormation != 2)
             throw new InvalidAnneeException(parcours.AnneeFormation + " - Année de la formation ne respecte pas le format");
     }
+    
+    public bool IsAuthorized(string role)
+    {
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
+    }
 }
