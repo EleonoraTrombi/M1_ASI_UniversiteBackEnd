@@ -68,7 +68,7 @@ namespace UniversiteRestApi.Controllers
             }
             
             GetEtudiantByIdUseCase uc = new GetEtudiantByIdUseCase(repositoryFactory);
-            // On vérifie si l'utilisateur connecté a le droit d'accéder à la ressource
+            // On vérifie si l'utilisateur connecté a le droit d'accéder
             if (!uc.IsAuthorized(role, user, id)) return Unauthorized();
             Etudiant? etud;
             try
@@ -104,7 +104,7 @@ namespace UniversiteRestApi.Controllers
             
             GetEtudiantCompletUseCase uc = new GetEtudiantCompletUseCase(repositoryFactory);
 
-            // On vérifie si l'utilisateur connecté a le droit d'accéder à la ressource
+            // On vérifie si l'utilisateur connecté a le droit d'accéder
             if (!uc.IsAuthorized(role, user, id)) return Unauthorized();
             Etudiant? etud;
             try
@@ -136,7 +136,6 @@ namespace UniversiteRestApi.Controllers
             }
 
             var useCase = new UniversiteDomain.UseCases.NoteUseCases.Get.GetNotesByEtudiantUseCase(repositoryFactory);
-            // Si l'utilisateur est un étudiant, on passe son ID pour la vérification, sinon 0 (car admin accède à tout)
             long userId = (user.Etudiant != null) ? user.Etudiant.Id : 0;
             
             if (!useCase.IsAuthorized(role, id, userId)) return Unauthorized();
@@ -181,12 +180,10 @@ namespace UniversiteRestApi.Controllers
             {
                 // Création du user associé
                 user = new UniversiteUser { UserName = etudiantDto.Email, Email = etudiantDto.Email, Etudiant = etud };
-                // Un créé l'utilisateur avec un mot de passe par défaut et un rôle étudiant
                 await createUserUc.ExecuteAsync(etud.Email, etud.Email, "Miage2025#", Roles.Etudiant, etud); 
             }
             catch (Exception e)
             {
-                // On supprime l'étudiant que l'on vient de créer. Sinon on a un étudiant mais pas de user associé
                 await new DeleteEtudiantUseCase(repositoryFactory).ExecuteAsync(etud.Id);
                 ModelState.AddModelError(nameof(e), e.Message);
                 return ValidationProblem();
