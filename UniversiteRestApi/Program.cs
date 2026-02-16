@@ -73,7 +73,6 @@ builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 ////////// Sécurisation
 builder.Services.AddIdentityCore<UniversiteUser>(options=>
     { 
-        // A modifier en prod pour renforcer la sécurité!!! 
         options.Password.RequiredLength = 4;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireUppercase = false;
