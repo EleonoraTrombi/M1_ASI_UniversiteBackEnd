@@ -83,7 +83,6 @@ public class NoteRepository(UniversiteDbContext context) : Repository<Note>(cont
         });
 
         // Conversion des lignes du fichier en objets DTO
-        // On matérialise la liste ici pour s'assurer que le reader est toujours ouvert
         var records = csv.GetRecords<NoteFileDto>().ToList();
         return Task.FromResult(records);
     }
