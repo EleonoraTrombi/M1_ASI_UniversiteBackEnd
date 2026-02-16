@@ -42,7 +42,7 @@ public class CreateEtudiantUseCase(IRepositoryFactory repositoryFactory)
         existe = await etudiantRepository.FindByConditionAsync(e=>e.Email.Equals(etudiant.Email));
         // Une autre façon de tester la vacuité de la liste
         if (existe is {Count:>0}) throw new DuplicateEmailException(etudiant.Email +" est déjà affecté à un étudiant");
-        // Le métier définit que les nom doit contenir plus de 3 lettres
+        // Le métier définit que les noms doivent contenir plus de 3 lettres
         if (etudiant.Nom.Length < 3) throw new InvalidNomEtudiantException(etudiant.Nom +" incorrect - Le nom d'un étudiant doit contenir plus de 3 caractères");
     }
     
