@@ -37,7 +37,7 @@ public class UpdateEtudiantUseCase(IRepositoryFactory factory)
         // Vérification du format du mail
         if (!CheckEmail.IsValidEmail(etudiant.Email)) throw new InvalidEmailException(etudiant.Email + " - Email mal formé");
         
-        // Le métier définit que les nom doite contenir plus de 3 lettres
+        // Le métier définit que les nom doit contenir plus de 3 lettres
         if (etudiant.Nom.Length < 3) throw new InvalidNomEtudiantException(etudiant.Nom +" incorrect - Le nom d'un étudiant doit contenir plus de 3 caractères");
         
         return existingEtudiant;
