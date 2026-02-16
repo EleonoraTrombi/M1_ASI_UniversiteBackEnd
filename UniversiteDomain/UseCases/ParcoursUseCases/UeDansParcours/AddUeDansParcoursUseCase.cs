@@ -31,7 +31,6 @@ public class AddUeDansParcoursUseCase(IRepositoryFactory repositoryFactory)
       }  
       public async Task<Parcours> ExecuteAsync(long idParcours, long [] idUes)
       { 
-        // Comme demandé par le client, on teste tous les règles avant de modifier les données
         foreach(var id in idUes) await CheckBusinessRules(idParcours, id);
         return await repositoryFactory.ParcoursRepository().AddUeAsync(idParcours, idUes);
       }   
