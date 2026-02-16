@@ -43,7 +43,6 @@ public class ParcoursUnitTests
         Parcours parcoursCree =new Parcours{Id=id,NomParcours=nomParcours, AnneeFormation = anneeFormation};
         mock.Setup(repoParcours=>repoParcours.CreateAsync(parcoursSansId)).ReturnsAsync(parcoursCree);
         
-        // On crée le bouchon (un faux parcoursRepository). Il est prêt à être utilisé
         var fauxParcoursRepository = mock.Object;
         
         // Création du use case en injectant notre faux repository
