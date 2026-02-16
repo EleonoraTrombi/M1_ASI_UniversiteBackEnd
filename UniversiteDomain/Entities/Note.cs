@@ -8,7 +8,7 @@ public class Note
     public float Valeur { get; set; }
     // ManyToOne : une Note est attribuées à plusieurs Ue
     public Ue? UeAvoirNote { get; set; } = null;
-    // ManyToOne : un étudiant obtient plusieurs notes
+    // ManyToOne : plusieurs notes appartiennet à un étudiant
     public Etudiant? EtudiantAvoirNote { get; set; } = null;
     
     public override string ToString()
