@@ -12,7 +12,6 @@ public class SaisirNotesMasseUseCase(IRepositoryFactory factory)
     public async Task ExecuteAsync(long idUe, byte[] fileContent)
     {
 
-        // Conversion du fichier en objets DTO via le repository
         var notesFile = await factory.NoteRepository().ParseNoteFileAsync(fileContent);
 
         await CheckBusinessRules(idUe, notesFile);
@@ -26,7 +25,7 @@ public class SaisirNotesMasseUseCase(IRepositoryFactory factory)
             // Pas de note, on ignore
             if (string.IsNullOrWhiteSpace(ligne.Note)) continue; 
 
-            // Conversion de la note deja validée dans CheckBusinessRules
+            // Conversion de la note
             if (!float.TryParse(ligne.Note, NumberStyles.Any, CultureInfo.InvariantCulture, out float valeurNote)) continue;
 
             // Récupération de l'étudiant
