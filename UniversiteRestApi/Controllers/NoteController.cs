@@ -41,7 +41,7 @@ public class NoteController(IRepositoryFactory repositoryFactory) : ControllerBa
             var useCase = new GenererFichierNotesUseCase(repositoryFactory);
             var file = await useCase.ExecuteAsync(idUe);
             
-            // Retour du fichier au client
+            // Retour du fichier
             return File(file.Content, file.ContentType, file.FileName);
         }
         catch (KeyNotFoundException e)
