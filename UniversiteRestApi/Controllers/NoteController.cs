@@ -228,7 +228,6 @@ public class NoteController(IRepositoryFactory repositoryFactory) : ControllerBa
         {
             var note = noteDto.ToEntity();
             var createdNote = await useCase.ExecuteAsync(note);
-            // Retourne une réponse 201 avec l'URL de la ressource créée
             return CreatedAtAction(nameof(Get), new { idEtudiant = createdNote.IdEtudiant, idUe = createdNote.IdUe }, createdNote);
         }
         catch (UniversiteDomain.Exceptions.EtudiantExceptions.EtudiantNotFoundException e)
