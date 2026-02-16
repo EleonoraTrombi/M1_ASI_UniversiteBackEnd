@@ -31,7 +31,7 @@ public class CreateUeUseCase(IUeRepository ueRepository)
         // Si une Ue avec le même numéro existe déjà, on lève une exception personnalisée
         if (existe is {Count:>0}) throw new DuplicateNumeroUeException(ue.NumeroUe+ " - ce numéro d'Ue est déjà affecté à une autre Ue");
         
-        // Le métier définit que les nom doit contenir plus de 3 lettres
+        // Le métier définit que les noms doivent contenir plus de 3 lettres
         if (ue.Intitule.Length <= 3) throw new InvalidNomUeException(ue.Intitule +" incorrect - Le nom d'une Ue doit contenir plus de 3 caractères");
     }
 
