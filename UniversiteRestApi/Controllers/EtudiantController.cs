@@ -272,7 +272,6 @@ namespace UniversiteRestApi.Controllers
             if (claims.FindFirst(ClaimTypes.Email)==null) throw new UnauthorizedAccessException();
             email = claims.FindFirst(ClaimTypes.Email).Value;
             if (email==null) throw new UnauthorizedAccessException();
-            //user = repositoryFactory.UniversiteUserRepository().FindByEmailAsync(email).Result;
             user = new FindUniversiteUserByEmailUseCase(repositoryFactory).ExecuteAsync(email).Result;
             if (user==null) throw new UnauthorizedAccessException();
             if (claims.Identity?.IsAuthenticated != true) throw new UnauthorizedAccessException();
