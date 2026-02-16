@@ -5,13 +5,13 @@ using UniversiteDomain.Entities;
 using UniversiteDomain.UseCases.EtudiantUseCases.Create;
 using UniversiteDomain.UseCases.EtudiantUseCases.Get;
 using UniversiteDomain.UseCases.NoteUseCases.Create;
-using UniversiteDomain.UseCases.NoteUseCases.Get; // Added
+using UniversiteDomain.UseCases.NoteUseCases.Get; 
 using UniversiteDomain.UseCases.ParcoursUseCases.Create;
-using UniversiteDomain.UseCases.ParcoursUseCases.Get; // Added
+using UniversiteDomain.UseCases.ParcoursUseCases.Get; 
 using UniversiteDomain.UseCases.ParcoursUseCases.EtudiantDansParcours;
 using UniversiteDomain.UseCases.ParcoursUseCases.UeDansParcours;
 using UniversiteDomain.UseCases.UeUseCases.Create;
-using UniversiteDomain.UseCases.UeUseCases.Get; // Added
+using UniversiteDomain.UseCases.UeUseCases.Get; 
 using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 
 namespace UniversiteDomainUnitTest;
@@ -101,7 +101,6 @@ public class AuthorizationTests
         Assert.That(useCase.IsAuthorized(Roles.Etudiant), Is.False);
     }
 
-    // New Tests
 
     [Test]
     public void GetNoteByIdUseCase_IsAuthorized()
